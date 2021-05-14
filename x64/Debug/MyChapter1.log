@@ -1,0 +1,5 @@
+﻿  Game.cpp
+C:\Users\Eidolon_Gear\Code\C++\MyChapter1\Game.cpp(4,1): error C2011: 'Game': 'class' type redefinition
+C:\Users\Eidolon_Gear\Code\C++\MyChapter1\Game.h(4): message : see declaration of 'Game'
+  Main.cpp
+  Generating Code...

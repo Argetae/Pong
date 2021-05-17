@@ -79,13 +79,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Eidolon_Gear\Code\C++\External\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Eidolon_Gear\Code\C++\External\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\tmanb\source\repos\External\SDL2\include;C:\Users\Eidolon_Gear\Code\C++\External\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\tmanb\source\repos\External\SDL2\lib\x86;C:\Users\Eidolon_Gear\Code\C++\External\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Eidolon_Gear\Code\C++\External\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Eidolon_Gear\Code\C++\External\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\tmanb\source\repos\External\SDL2\include;C:\Users\Eidolon_Gear\Code\C++\External\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\tmanb\source\repos\External\SDL2\lib\x86;C:\Users\Eidolon_Gear\Code\C++\External\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

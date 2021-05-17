@@ -1,1 +1,2 @@
 C:\Users\Eidolon_Gear\Code\C++\MyChapter1\Debug\MyChapter1.exe
+C:\Users\tmanb\source\repos\Pong\Debug\MyChapter1.exe

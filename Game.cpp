@@ -1,6 +1,7 @@
 #include "Game.h"
 
 const int thickness = 15;
+const int paddleH = thickness*8;
 
 Game::Game()
 	:mWindow(nullptr), 
@@ -88,8 +89,15 @@ void Game::ProcessInput() {
 
 	// Get state of keyboard
 	const Uint8* state = SDL_GetKeyboardState(NULL);
+
 	if (state[SDL_SCANCODE_ESCAPE]) {
 		mIsRunning = false;
+	} 
+	if (state[SDL_SCANCODE_W]) {
+		mPaddleDir -= 1;
+	} 
+	if (state[SDL_SCANCODE_S]) {
+		mPaddleDir += 1;
 	}
 }
 
@@ -101,6 +109,45 @@ void Game::UpdateGame() {
 	//Delta time is the difference in ticks from last frame
 	//(coverted to seconds)
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
+
+	if (deltaTime > .05f)
+	{
+		deltaTime = .05f;
+	}
+
+	//Paddle Collision
+	if (mPaddleDir != 0) {
+		mPaddlePos.y += mPaddleDir * 500.0f * deltaTime;
+		mPaddleDir = 0;
+
+		if (mPaddlePos.y < (paddleH / 2 + thickness)) {
+			mPaddlePos.y = paddleH / 2.0f + thickness;
+		}
+		else if (mPaddlePos.y > (768.0f - paddleH/2.0f - thickness)) {
+			mPaddlePos.y = 768.0f - paddleH / 2.0f - thickness;
+		}
+	}
+
+	//Ball Physics
+	mBallPos.x += mBallVel.x * deltaTime;
+	mBallPos.y += mBallVel.y * deltaTime;
+
+	if (mBallPos.y <= thickness && mBallVel.y < 0.0f) {
+		mBallVel.y *= -1;
+	}
+	if (mBallPos.y >= 768 - thickness && mBallVel.y > 0.0f) {
+		mBallVel.y *= -1;
+	}
+	if (mBallPos.x >= 1024 - thickness && mBallVel.x > 0.0f) {
+		mBallVel.x *= -1;
+	}
+
+	if (abs(static_cast<int>(mBallPos.y - mPaddlePos.y)) < paddleH / 2.0f
+		&& mBallPos.x <= 30.0f && mBallPos.x >= 20.0f
+		&& mBallVel.x < 0.0f) {
+		mBallVel.x *= -1.0f;
+	}
+
 
 	//Update tick counts
 	mTicksCount = SDL_GetTicks();
@@ -152,9 +199,9 @@ void Game::GenerateOutput() {
 
 	SDL_Rect paddle{
 		static_cast<int>(mPaddlePos.x - thickness / 2),
-		static_cast<int>(mPaddlePos.y - thickness * 8 / 2),
+		static_cast<int>(mPaddlePos.y - paddleH / 2),
 		thickness,
-		thickness * 8
+		paddleH
 	};
 
 	SDL_RenderFillRect(mRenderer, &ball);

@@ -46,6 +46,8 @@ bool Game::Initialize() {
 
 	mPaddlePos.x = 20.0f;
 	mPaddlePos.y = 768.0f / 2.0f;
+	mPaddlePos2.x = 1004.0f;
+	mPaddlePos2.y = 768.0f / 2.0f;
 	mBallPos.x = 1024.0f / 2.0f;
 	mBallPos.y = 768.0f / 2.0f;
 	mBallVel.x = -200.0f;
@@ -99,6 +101,13 @@ void Game::ProcessInput() {
 	if (state[SDL_SCANCODE_S]) {
 		mPaddleDir += 1;
 	}
+	if (state[SDL_SCANCODE_I]) {
+		mPaddleDir2 -= 1;
+	} 
+	if (state[SDL_SCANCODE_K]) {
+		mPaddleDir2 += 1;
+	}
+	
 }
 
 void Game::UpdateGame() {
@@ -127,6 +136,18 @@ void Game::UpdateGame() {
 			mPaddlePos.y = 768.0f - paddleH / 2.0f - thickness;
 		}
 	}
+	//Paddle 2 Collision
+	if (mPaddleDir2 != 0) {
+		mPaddlePos2.y += mPaddleDir2 * 500.0f * deltaTime;
+		mPaddleDir2 = 0;
+
+		if (mPaddlePos2.y < (paddleH / 2 + thickness)) {
+			mPaddlePos2.y = paddleH / 2.0f + thickness;
+		}
+		else if (mPaddlePos2.y > (768.0f - paddleH / 2.0f - thickness)) {
+			mPaddlePos2.y = 768.0f - paddleH / 2.0f - thickness;
+		}
+	}
 
 	//Ball Physics
 	mBallPos.x += mBallVel.x * deltaTime;
@@ -138,16 +159,22 @@ void Game::UpdateGame() {
 	if (mBallPos.y >= 768 - thickness && mBallVel.y > 0.0f) {
 		mBallVel.y *= -1;
 	}
-	if (mBallPos.x >= 1024 - thickness && mBallVel.x > 0.0f) {
+
+	//Right wall collision
+	/*if (mBallPos.x >= 1024 - thickness && mBallVel.x > 0.0f) {
 		mBallVel.x *= -1;
 	}
-
+	*/
 	if (abs(static_cast<int>(mBallPos.y - mPaddlePos.y)) < paddleH / 2.0f
 		&& mBallPos.x <= 30.0f && mBallPos.x >= 20.0f
 		&& mBallVel.x < 0.0f) {
 		mBallVel.x *= -1.0f;
 	}
-
+	if (abs(static_cast<int>(mBallPos.y - mPaddlePos2.y)) < paddleH / 2.0f
+		&& mBallPos.x >= 1024.0f - 30.0f && mBallPos.x <= 1004.0f
+		&& mBallVel.x > 0.0f) {
+		mBallVel.x *= -1.0f;
+	}
 
 	//Update tick counts
 	mTicksCount = SDL_GetTicks();
@@ -183,11 +210,12 @@ void Game::GenerateOutput() {
 	SDL_RenderFillRect(mRenderer, &wall);
 
 	// Draw right wall
-	wall.x = 1024 - thickness;
+	/*wall.x = 1024 - thickness;
 	wall.y = 0;
 	wall.w = thickness;
 	wall.h = 1024;
 	SDL_RenderFillRect(mRenderer, &wall);
+	*/
 
 	// Draw ball
 	SDL_Rect ball{
@@ -204,7 +232,15 @@ void Game::GenerateOutput() {
 		paddleH
 	};
 
+	SDL_Rect paddle2{
+		static_cast<int>(mPaddlePos2.x - thickness / 2),
+		static_cast<int>(mPaddlePos2.y - paddleH / 2),
+		thickness,
+		paddleH
+	};
+
 	SDL_RenderFillRect(mRenderer, &ball);
 	SDL_RenderFillRect(mRenderer, &paddle);
+	SDL_RenderFillRect(mRenderer, &paddle2);
 	SDL_RenderPresent(mRenderer); //Swaps front and back buffer to the color to the window
 }
